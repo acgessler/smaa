@@ -1,0 +1,162 @@
+/**
+ * This XNA4/C# port of SMAA is (c) 2012, Alexander Christoph Gessler
+ * It is released as Open Source under the same conditions as SMAA itself.
+ * 
+ * Check out LICENSE.txt in the root folder of the repository or
+ * Readme.txt in /Demo/XNA for more information.
+*/
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using System.Diagnostics;
+
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.GamerServices;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
+
+namespace SMAADemo
+{
+   
+    public class Demo : Microsoft.Xna.Framework.Game
+    {
+        GraphicsDeviceManager graphics;
+        SpriteBatch spriteBatch;
+        SMAA smaa;
+        Texture2D texture;
+        RenderTarget2D rt;
+
+        int mode = 0;
+        const int MAX_MODES = 4;
+        bool wasDown = false;
+
+        string baseTitle = "Subpixel Morphological Antialiasing (SMAA) XNA Demo - [Enter] to cycle modes - ";
+
+        public Demo()
+        {
+            graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferWidth = 1280;
+            graphics.PreferredBackBufferHeight = 720;
+
+            Content.RootDirectory = "";
+        }
+
+      
+        protected override void Initialize()
+        {
+            base.Initialize();
+        }
+
+       
+        protected override void LoadContent()
+        {
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            smaa = new SMAA(GraphicsDevice, 1280, 720, SMAA.Preset.ULTRA,
+                Content, null, null, "shaders/SMAA_", "textures/", null);
+
+            texture = Content.Load<Texture2D>("textures/Unigine02");
+
+            rt = new RenderTarget2D(GraphicsDevice, 1280, 720);
+        }
+
+      
+        protected override void UnloadContent()
+        {
+            smaa.Dispose();
+        }
+
+       
+        protected override void Update(GameTime gameTime)
+        {
+            // Allows the game to exit
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+                this.Exit();
+
+            KeyboardState ks = Keyboard.GetState();
+            if (ks.IsKeyUp(Keys.Enter))
+            {
+                if (wasDown)
+                {
+                    mode = (mode + 1) % MAX_MODES;
+                    wasDown = false;
+
+                    switch (mode)
+                    {
+                        case 0:
+                            Window.Title = baseTitle + "No SMAA";
+                            break;
+
+                        case 1:
+                            Window.Title = baseTitle + "Quality Ultra, Edge Detection";
+                            break;
+
+                        case 2:
+                            Window.Title = baseTitle + "Quality Ultra, Luma Detection";
+                            break;
+
+                        case 3:
+                            Window.Title = baseTitle + "Quality Ultra, Color Detection";
+                            break;
+
+                        default:
+                            Debug.Assert(false);
+                            return;
+                    }
+                }
+            }
+            else
+            {
+                wasDown = true;
+            }
+
+            base.Update(gameTime);
+        }
+
+      
+        protected override void Draw(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            if (mode > 0)
+            {
+                GraphicsDevice.SetRenderTarget(rt);
+            }
+
+            spriteBatch.Begin();
+            spriteBatch.Draw(texture, new Rectangle(0, 0, 1280, 720), Color.White);
+            spriteBatch.End();
+
+            if (mode > 0)
+            {
+                SMAA.Input sinput; 
+                switch (mode)
+                {
+                    case 1:
+                        sinput = SMAA.Input.DEPTH;
+                        break;
+
+                    case 2:
+                        sinput = SMAA.Input.LUMA;
+                        break;
+
+                    case 3:
+                        sinput = SMAA.Input.COLOR;
+                        break;
+
+                    default:
+                        Debug.Assert(false);
+                        return;
+                }
+
+                smaa.Go(rt, rt, null, sinput);
+            }
+
+            base.Draw(gameTime);
+        }
+    }
+}

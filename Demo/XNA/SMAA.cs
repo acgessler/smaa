@@ -1,9 +1,9 @@
 ﻿
 /** SMAA demo (see the disclaimer/original copyright notice below) ported to 
- *  C# / XNA 4.0 by Alexander C. Gessler (www.greentoken.de).
+ *  C# / XNA 4.0 by Alexander Christoph Gessler (www.greentoken.de).
  *  
  *  This is more or less a one-by-one translation of SMAA.h/SMAA.cpp 
- *  from the D3D9 SMAA demo to C#. 
+ *  from the D3D9 SMAA demo to C#.
  */
 
 /**

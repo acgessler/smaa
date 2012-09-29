@@ -11,15 +11,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
 namespace SMAADemo
 {
-    public interface IEffectProvider
+    public enum LogLevel
     {
-        Effect Get(string name);
-        void Prefetch(string name);
+        VERBOSE = 0, INFO = 5, WARN = 10, ERROR = 15
+    }
+
+    public interface ILogger
+    {
+        void Log(string text, int level = (int)LogLevel.INFO);
     }
 }
-

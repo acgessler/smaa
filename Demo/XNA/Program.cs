@@ -1,4 +1,4 @@
-﻿/**
+/**
  * This XNA4/C# port of SMAA is (c) 2012, Alexander Christoph Gessler
  * It is released as Open Source under the same conditions as SMAA itself.
  * 
@@ -7,19 +7,20 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace SMAADemo
 {
-    public interface IEffectProvider
+#if WINDOWS || XBOX
+    static class Program
     {
-        Effect Get(string name);
-        void Prefetch(string name);
+        static void Main(string[] args)
+        {
+            using (Demo game = new Demo())
+            {
+                game.Run();
+            }
+        }
     }
+#endif
 }
 

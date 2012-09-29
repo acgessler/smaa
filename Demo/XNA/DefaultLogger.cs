@@ -11,15 +11,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
 namespace SMAADemo
 {
-    public interface IEffectProvider
+    /** Default Logger implementation, prints to console */
+    public class DefaultLogger : ILogger
     {
-        Effect Get(string name);
-        void Prefetch(string name);
+        public void Log(string text, int level = (int)LogLevel.INFO)
+        {
+            Console.WriteLine(level.ToString() + ": " + text);
+        }
     }
 }
-

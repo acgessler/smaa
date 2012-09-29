@@ -30,7 +30,7 @@ namespace SMAADemo
         public DefaultTextureProvider(ContentManager _Content, ILogger _Logger = null, 
             string _Prefix = "textures/")
         {
-            Logger = _Logger ?? new NullLogger();
+            Logger = _Logger;
             Content = _Content;
             Prefix = _Prefix;
 

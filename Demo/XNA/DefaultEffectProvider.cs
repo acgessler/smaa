@@ -29,7 +29,7 @@ namespace SMAADemo
         public DefaultEffectProvider(ContentManager _Content, ILogger _Logger = null, 
             string _Prefix = "shaders/")
         {
-            Logger = _Logger ?? new NullLogger();
+            Logger = _Logger;
             Content = _Content;
             Prefix = _Prefix;
 

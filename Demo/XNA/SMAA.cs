@@ -125,15 +125,14 @@ namespace SMAADemo
             RenderTarget2D rt_rg = null,
             RenderTarget2D rt_rgba = null,
             string effectBaseName = null /* default: "SMAA_" */,
-            string textureBaseName = null /* default: "" */
+            string textureBaseName = null /* default: "" */,
+            ILogger logger = null
             )
             : this(_device, _width, _height, _preset,
-            new DefaultTextureProvider(_content, null),
-            new DefaultEffectProvider(_content, null),
+            new DefaultTextureProvider(_content, logger, textureBaseName),
+            new DefaultEffectProvider(_content, logger, effectBaseName),
             rt_rg,
-            rt_rgba,
-            effectBaseName,
-            textureBaseName
+            rt_rgba
             )
         {
         }
@@ -171,8 +170,7 @@ namespace SMAADemo
             ITextureProvider texProvider,
             IEffectProvider effectProvider,
             RenderTarget2D rt_rg = null,
-            RenderTarget2D rt_rgba = null,
-            string effectBaseName = null /* default: "SMAA_" */
+            RenderTarget2D rt_rgba = null
             )
         {
             Debug.Assert(_width > 0);
@@ -181,8 +179,7 @@ namespace SMAADemo
             Debug.Assert(texProvider != null);
             Debug.Assert(_device != null);
 
-            effectBaseName = effectBaseName ?? "SMAA_";
-            effect = effectProvider.Get(effectBaseName + _preset.ToString());
+            effect = effectProvider.Get(_preset.ToString());
             
             device = _device;
             width = _width;

@@ -34,7 +34,7 @@ namespace SMAADemo
         const int MAX_MODES = 4;
         bool wasDown = false;
 
-        string baseTitle = "Subpixel Morphological Antialiasing (SMAA) XNA Demo - [Enter] to cycle modes - ";
+        string baseTitle = "Subpixel Morphological Antialiasing (SMAA) XNA Demo - [Space] to cycle modes - ";
 
         public Demo()
         {
@@ -43,6 +43,8 @@ namespace SMAADemo
             graphics.PreferredBackBufferHeight = 720;
 
             Content.RootDirectory = "";
+
+            Window.Title = baseTitle + "No SMAA";
         }
 
       
@@ -78,7 +80,7 @@ namespace SMAADemo
                 this.Exit();
 
             KeyboardState ks = Keyboard.GetState();
-            if (ks.IsKeyUp(Keys.Enter))
+            if (ks.IsKeyUp(Keys.Space))
             {
                 if (wasDown)
                 {

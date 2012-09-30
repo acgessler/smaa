@@ -7,6 +7,11 @@
 */
 
 using System;
+using System.Windows.Forms;
+
+#if XBOX
+#error demo app is windows only (smaa of course is not)
+#endif
 
 namespace SMAADemo
 {
@@ -15,6 +20,13 @@ namespace SMAADemo
     {
         static void Main(string[] args)
         {
+            MessageBox.Show("Welcome to the SMAA demo app. The image is pre-rendered and comes " +
+                "from the original SMAA demo app (it is a screenshot from a Unigine demo). "  +
+                "Using a pre-rendered image is possible because SMAA is fully image-based " +
+                "and takes no inputs except the rendered scene." +
+                "\n\nPress [Space] to cycle between different SMAA modes, the current active " +
+                "mode is shown in the window title");
+
             using (Demo game = new Demo())
             {
                 game.Run();

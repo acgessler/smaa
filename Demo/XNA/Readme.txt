@@ -45,6 +45,25 @@ in my measurements but your mileage may, of course, vary).
 3. Known Issues
 ==========================
 
+- SMAA uses the stencil buffer to mask pixels that need no 
+  anti-aliasing, which greatly improves performance (since typically
+  most pixels aren't edge pixels). Unfortunately, in XNA stencil
+  buffers are tightly bound to render targets, rendering this
+  optimization very difficult (the reference implementation first
+  renders into a render target, populates a stencil buffer. Then
+  it sets this render target as texture for the second pass but
+  continues to use the stencil buffer -- sigh)
+
+  For this reason, the stencil buffer optimization is disabled
+  in the current XNA version of the shader.
+
+  The only way out seems to be to render the first pass into two 
+  render targets, the second of of which has a stencil buffer 
+  attached. I didn't test this and I suspect it will be slower
+  than not using stencil at all (2 render targets have twice
+  the resolve bandwidth cost).
+
+
 - XNA is based on a sub DX9 feature level in which linear filtering
   on floating point textures is not supported, even if the hardware
   is capable of doit it (which is the case for most hardware in

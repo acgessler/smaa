@@ -15,9 +15,9 @@ using Microsoft.Xna.Framework.Input;
 namespace SMAADemo
 {
    
-    public class Demo : Microsoft.Xna.Framework.Game
+    public class Demo : Game
     {
-        GraphicsDeviceManager graphics;
+        private GraphicsDeviceManager gd;
         SpriteBatch spriteBatch;
         SMAA smaa;
         Texture2D texture;
@@ -27,12 +27,12 @@ namespace SMAADemo
         const int MAX_MODES = 4;
         bool wasDown;
 
-        string baseTitle = "Subpixel Morphological Antialiasing (SMAA) XNA Demo - [Space] to cycle modes - ";
+        private const string baseTitle = "Subpixel Morphological Antialiasing (SMAA) XNA Demo - [Space] to cycle modes - ";
 
         public Demo()
         {
-            graphics = new GraphicsDeviceManager(this)
-                           {PreferredBackBufferWidth = 1280, PreferredBackBufferHeight = 720};
+            gd = new GraphicsDeviceManager(this)
+                {PreferredBackBufferWidth = 1280, PreferredBackBufferHeight = 720};
 
             Content.RootDirectory = "";
 
@@ -63,7 +63,7 @@ namespace SMAADemo
         {
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
+                Exit();
 
             KeyboardState ks = Keyboard.GetState();
             if (ks.IsKeyUp(Keys.Space))

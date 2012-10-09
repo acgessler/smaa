@@ -7,6 +7,7 @@
 */
 
 using System;
+using System.Globalization;
 
 namespace SMAADemo
 {
@@ -15,7 +16,7 @@ namespace SMAADemo
     {
         public void Log(string text, int level = (int)LogLevel.INFO)
         {
-            Console.WriteLine(level.ToString() + ": " + text);
+            Console.WriteLine(level.ToString(CultureInfo.InvariantCulture) + ": " + text);
         }
     }
 }

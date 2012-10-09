@@ -352,7 +352,7 @@ namespace SMAADemo
             blendTexHandle.SetValue(blendTex);
             effect.CurrentTechnique = neighborhoodBlendingHandle;
 
-            // Yeah! We will finally have the antialiased image :D
+            // Yeah! We will finally have the anti aliased image :D
             var pass = effect.CurrentTechnique.Passes[0];
             pass.Apply();
 
@@ -375,32 +375,37 @@ namespace SMAADemo
         }
 
 
-        private GraphicsDevice device;
+        private readonly GraphicsDevice device;
         private Effect effect;
 
         public RenderTarget2D edgeTex;
         public RenderTarget2D blendTex;
-        private bool releaseEdgeResources;
-        private bool releaseBlendResources;
+        private readonly bool releaseEdgeResources;
+        private readonly bool releaseBlendResources;
 
-        private Texture2D areaTex;
-        private Texture2D searchTex;
+        private readonly Texture2D areaTex;
+        private readonly Texture2D searchTex;
 
 
-        private EffectParameter thresholdHandle, maxSearchStepsHandle;
-        private EffectParameter areaTexHandle, searchTexHandle;
-        private EffectParameter colorTexHandle, depthTexHandle;
-        private EffectParameter edgesTexHandle, blendTexHandle;
-        private EffectTechnique lumaEdgeDetectionHandle, 
-            colorEdgeDetectionHandle, 
-            depthEdgeDetectionHandle,
-            blendWeightCalculationHandle, 
-            neighborhoodBlendingHandle;
+        private readonly EffectParameter thresholdHandle;
+        private readonly EffectParameter maxSearchStepsHandle;
+        private readonly EffectParameter areaTexHandle;
+        private readonly EffectParameter searchTexHandle;
+        private readonly EffectParameter colorTexHandle;
+        private readonly EffectParameter depthTexHandle;
+        private readonly EffectParameter edgesTexHandle;
+        private readonly EffectParameter blendTexHandle;
 
-        private EffectParameter pixelSizeHandle;
+        private readonly EffectTechnique lumaEdgeDetectionHandle;
+        private readonly EffectTechnique colorEdgeDetectionHandle;
+        private readonly EffectTechnique depthEdgeDetectionHandle;
+        private readonly EffectTechnique blendWeightCalculationHandle;
+        private readonly EffectTechnique neighborhoodBlendingHandle;
+        private readonly EffectParameter pixelSizeHandle;
 
         private int maxSearchSteps;
         private float threshold;
-        private int width, height;
+        private readonly int width;
+        private readonly int height;
     }
 }

@@ -8,10 +8,10 @@ namespace SMAADemo
     /** Implementation of IEffectProvider via XNA content pipeline with optional logging */
     public class DefaultEffectProvider : IEffectProvider
     {
-        private Dictionary<string, Effect> Cache;
-        private ContentManager Content;
-        private ILogger Logger;
-        private string Prefix;
+        private readonly Dictionary<string, Effect> Cache;
+        private readonly ContentManager Content;
+        private readonly ILogger Logger;
+        private readonly string Prefix;
 
         /** Construct an effect provider given a ContentManager
          *

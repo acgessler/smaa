@@ -8,10 +8,10 @@ namespace SMAADemo
     /** Implementation of ITextureProvider via XNA content pipeline with optional logging */
     public class DefaultTextureProvider : ITextureProvider
     {
-        private Dictionary<string, Texture2D> Cache;
-        private ContentManager Content;
-        private ILogger Logger;
-        private string Prefix;
+        private readonly Dictionary<string, Texture2D> Cache;
+        private readonly ContentManager Content;
+        private readonly ILogger Logger;
+        private readonly string Prefix;
 
 
         /** Construct a texture provider given a ContentManager

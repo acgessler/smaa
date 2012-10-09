@@ -6,7 +6,6 @@
  * Readme.txt in /Demo/XNA for more information.
 */
 
-using System;
 using System.Windows.Forms;
 
 #if XBOX
@@ -18,7 +17,7 @@ namespace SMAADemo
 #if WINDOWS || XBOX
     static class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             MessageBox.Show("Welcome to the SMAA demo app. The image is pre-rendered and comes " +
                 "from the original SMAA demo app (it is a screenshot from a Unigine demo). "  +
@@ -27,7 +26,7 @@ namespace SMAADemo
                 "\n\nPress [Space] to cycle between different SMAA modes, the current active " +
                 "mode is shown in the window title");
 
-            using (Demo game = new Demo())
+            using (var game = new Demo())
             {
                 game.Run();
             }

@@ -6,18 +6,11 @@
  * Readme.txt in /Demo/XNA for more information.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 using System.Diagnostics;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 
 namespace SMAADemo
 {
@@ -30,36 +23,29 @@ namespace SMAADemo
         Texture2D texture;
         RenderTarget2D rt;
 
-        int mode = 0;
+        int mode;
         const int MAX_MODES = 4;
-        bool wasDown = false;
+        bool wasDown;
 
         string baseTitle = "Subpixel Morphological Antialiasing (SMAA) XNA Demo - [Space] to cycle modes - ";
 
         public Demo()
         {
-            graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferWidth = 1280;
-            graphics.PreferredBackBufferHeight = 720;
+            graphics = new GraphicsDeviceManager(this)
+                           {PreferredBackBufferWidth = 1280, PreferredBackBufferHeight = 720};
 
             Content.RootDirectory = "";
 
             Window.Title = baseTitle + "No SMAA";
         }
 
-      
-        protected override void Initialize()
-        {
-            base.Initialize();
-        }
 
-       
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             smaa = new SMAA(GraphicsDevice, 1280, 720, SMAA.Preset.ULTRA,
-                Content, null, null, "shaders/SMAA_", "textures/", null);
+                Content, null, null, "shaders/SMAA_", "textures/");
 
             texture = Content.Load<Texture2D>("textures/Unigine02");
 

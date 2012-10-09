@@ -1,9 +1,9 @@
 ﻿
 /** SMAA demo (see the disclaimer/original copyright notice below) ported to 
- *  C# / XNA 4.0 by Alexander Christoph Gessler (www.greentoken.de).
+ *  C# / XNA 4.0 by Alexander C. Gessler (www.greentoken.de).
  *  
  *  This is more or less a one-by-one translation of SMAA.h/SMAA.cpp 
- *  from the D3D9 SMAA demo to C#.
+ *  from the D3D9 SMAA demo to C#. 
  */
 
 /**
@@ -44,13 +44,7 @@
  * policies, either expressed or implied, of the copyright holders.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Diagnostics;
-using System.IO;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -125,12 +119,11 @@ namespace SMAADemo
             RenderTarget2D rt_rg = null,
             RenderTarget2D rt_rgba = null,
             string effectBaseName = null /* default: "SMAA_" */,
-            string textureBaseName = null /* default: "" */,
-            ILogger logger = null
+            string textureBaseName = null /* default: "" */
             )
             : this(_device, _width, _height, _preset,
-            new DefaultTextureProvider(_content, logger, textureBaseName),
-            new DefaultEffectProvider(_content, logger, effectBaseName),
+            new DefaultTextureProvider(_content, null, textureBaseName),
+            new DefaultEffectProvider(_content, null, effectBaseName),
             rt_rg,
             rt_rgba
             )
@@ -157,11 +150,11 @@ namespace SMAADemo
          * be prepended to the search path for these textures in case
          * you don't want them in the root content folder.
          * 
-         * `effectBaseName` specifies the first part of the effect name to 
-         * be loaded. The `preset` string will be appended to it. 
+         * `effectBaseName` specifies the first part of the effect to be loaded.
+         * the chosen `preset` will be appended. 
          * 
          * NOTE: The caller is responsible for ensuring that the effect exists
-         * and can be accessed by the given contentmanager. This is because compiling
+         * and can be accessed by the given content manager. This is because compiling
          * shaders at runtime is virtually impossible / very difficult to achieve in
          * XNA and the easiest way is to use the content pipeline to generate
          * all shader permutations upfront.
@@ -187,11 +180,7 @@ namespace SMAADemo
 
             threshold = 0.05f;
             maxSearchSteps = 8;
-          
-            // Vertex declaration for rendering the typical fullscreen quad later on.
-            vertexDeclaration = VertexPositionTexture.VertexDeclaration;
-
-
+   
             // If storage for the edges is not specified we will create it.
             if (rt_rg != null)
             {
@@ -211,9 +200,9 @@ namespace SMAADemo
 
 
             // If storage for the blend weights is not specified we will create it.
-            if (rt_rg != null)
+            if (rt_rgba != null)
             {
-                blendTex = rt_rg;
+                blendTex = rt_rgba;
                 releaseBlendResources = false;
             }
             else
@@ -239,7 +228,7 @@ namespace SMAADemo
             depthTexHandle = effect.Parameters["depthTex2D"];
             edgesTexHandle = effect.Parameters["edgesTex2D"];
             blendTexHandle = effect.Parameters["blendTex2D"];
-            pixelSize = effect.Parameters["SMAA_PIXEL_SIZE"];
+            pixelSizeHandle = effect.Parameters["SMAA_PIXEL_SIZE"];
             lumaEdgeDetectionHandle = effect.Techniques["LumaEdgeDetection"];
             colorEdgeDetectionHandle = effect.Techniques["ColorEdgeDetection"];
             depthEdgeDetectionHandle = effect.Techniques["DepthEdgeDetection"];
@@ -269,7 +258,7 @@ namespace SMAADemo
 
 
         /**
-         * Processes input texture 'src', storing the antialiased image into
+         * Processes input texture 'src', storing the anti aliased image into
          * 'dst'. Note that 'src' and 'dst' should be associated to different
          * buffers.
          *
@@ -291,7 +280,7 @@ namespace SMAADemo
                 RenderTarget2D dst,
                 Input input)
         {
-            pixelSize.SetValue(Vector2.One / new Vector2(width, height));
+            pixelSizeHandle.SetValue(Vector2.One / new Vector2(width, height));
 
             edgesDetectionPass(edges, input);
             blendingWeightsCalculationPass();
@@ -333,7 +322,7 @@ namespace SMAADemo
             var pass = effect.CurrentTechnique.Passes[0];
             pass.Apply();
 
-            quad(width, height);
+            quad();
         }
         
         
@@ -352,7 +341,7 @@ namespace SMAADemo
             var pass = effect.CurrentTechnique.Passes[0];
             pass.Apply();
 
-            quad(width, height);
+            quad();
         }
         
         
@@ -367,28 +356,27 @@ namespace SMAADemo
             var pass = effect.CurrentTechnique.Passes[0];
             pass.Apply();
 
-            quad(width, height);
+            quad();
         }
         
         
-        private void quad(int width, int height)
+        private void quad()
         {
-            // Typical aligned fullscreen quad.
-            Vector2 pixelSize = Vector2.One / new Vector2(width, height);
-            VertexPositionTexture[] quad = new VertexPositionTexture[] {
+            // Typical aligned full screen quad.
+            var pixelSize = Vector2.One / new Vector2(width, height);
+            var quad = new[] {
                 new VertexPositionTexture( new Vector3(-1.0f - pixelSize.X,  1.0f + pixelSize.Y, 0.5f), new Vector2(0.0f, 0.0f)),
                 new VertexPositionTexture( new Vector3(1.0f - pixelSize.X,  1.0f + pixelSize.Y, 0.5f), new Vector2(1.0f, 0.0f)),
                 new VertexPositionTexture( new Vector3(-1.0f - pixelSize.X, -1.0f + pixelSize.Y, 0.5f), new Vector2(0.0f, 1.0f)),
                 new VertexPositionTexture( new Vector3(1.0f - pixelSize.X, -1.0f + pixelSize.Y, 0.5f), new Vector2(1.0f, 1.0f))
             };
 
-            device.DrawUserPrimitives<VertexPositionTexture>(PrimitiveType.TriangleStrip, quad, 0, 2, VertexPositionTexture.VertexDeclaration);
+            device.DrawUserPrimitives(PrimitiveType.TriangleStrip, quad, 0, 2, VertexPositionTexture.VertexDeclaration);
         }
 
 
         private GraphicsDevice device;
         private Effect effect;
-        private VertexDeclaration vertexDeclaration;
 
         public RenderTarget2D edgeTex;
         public RenderTarget2D blendTex;
@@ -403,10 +391,13 @@ namespace SMAADemo
         private EffectParameter areaTexHandle, searchTexHandle;
         private EffectParameter colorTexHandle, depthTexHandle;
         private EffectParameter edgesTexHandle, blendTexHandle;
-        private EffectTechnique lumaEdgeDetectionHandle, colorEdgeDetectionHandle, depthEdgeDetectionHandle,
-                   blendWeightCalculationHandle, neighborhoodBlendingHandle;
+        private EffectTechnique lumaEdgeDetectionHandle, 
+            colorEdgeDetectionHandle, 
+            depthEdgeDetectionHandle,
+            blendWeightCalculationHandle, 
+            neighborhoodBlendingHandle;
 
-        private EffectParameter pixelSize;
+        private EffectParameter pixelSizeHandle;
 
         private int maxSearchSteps;
         private float threshold;

@@ -319,8 +319,7 @@ namespace SMAADemo
             }
 
             // Do it!
-            var pass = effect.CurrentTechnique.Passes[0];
-            pass.Apply();
+            effect.CurrentTechnique.Passes[0].Apply();
 
             quad();
         }
@@ -338,8 +337,7 @@ namespace SMAADemo
             effect.CurrentTechnique = blendWeightCalculationHandle;
 
             // And here we go!
-            var pass = effect.CurrentTechnique.Passes[0];
-            pass.Apply();
+            effect.CurrentTechnique.Passes[0].Apply();
 
             quad();
         }
@@ -353,8 +351,7 @@ namespace SMAADemo
             effect.CurrentTechnique = neighborhoodBlendingHandle;
 
             // Yeah! We will finally have the anti aliased image :D
-            var pass = effect.CurrentTechnique.Passes[0];
-            pass.Apply();
+            effect.CurrentTechnique.Passes[0].Apply();
 
             quad();
         }

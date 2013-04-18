@@ -21,7 +21,7 @@ namespace SMAADemo
          *   using the supplied content manager. 
          */
         public DefaultEffectProvider(ContentManager _Content, ILogger _Logger = null, 
-            string _Prefix = "shaders/")
+            string _Prefix = "shaders/SMAA_")
         {
             Logger = _Logger;
             Content = _Content;
